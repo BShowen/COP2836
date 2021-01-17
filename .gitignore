@@ -1,1 +1,3 @@
-personalNotes
+.vscode
+personalNotes/*
+node_modules/*
