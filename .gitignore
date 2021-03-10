@@ -1,3 +1,6 @@
 .vscode
-personalNotes/*
-node_modules/*
+personalNotes
+.env
+myApp
+mern/api/node_modules
+mern/ui/node_modules
