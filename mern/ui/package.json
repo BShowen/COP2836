@@ -1,0 +1,39 @@
+{
+  "name": "pro-mern-stack-2-ui",
+  "version": "1.0.0",
+  "description": "Pro MERN Stack (2nd edition) - UI",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon -w uiserver.js -w .env uiserver.js",
+    "lint": "eslint . --ext js,jsx --ignore-pattern public",
+    "compile": "babel src --out-dir public",
+    "watch": "babel src --out-dir public --watch --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BShowen/COP2836.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BShowen/COP2836/issues"
+  },
+  "homepage": "https://github.com/BShowen/COP2836#readme",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^0.21.0",
+    "nodemon": "^1.19.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.22.0"
+  }
+}
