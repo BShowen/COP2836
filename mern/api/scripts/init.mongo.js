@@ -7,26 +7,26 @@
 
 db.issues.remove({});
 
-const issuesDB = [
-  {
-    id: 1,
-    status: 'New',
-    owner: 'Ravan',
-    effort: 5,
-    created: new Date('2019-01-15'),
-    due: undefined,
-    title: 'Error in console when clicking Add',
-  },
-  {
-    status: 'Assigned',
-    owner: 'Eddie',
-    effort: 14,
-    created: new Date('2019-01-16'),
-    due: new Date('2019-02-01'),
-    id: 2,
-    title: 'Missing bottom border on panel',
-  },
-];
+// const issuesDB = [
+//   {
+//     id: 1,
+//     status: 'New',
+//     owner: 'Ravan',
+//     effort: 5,
+//     created: new Date('2019-01-15'),
+//     due: undefined,
+//     title: 'Error in console when clicking Add',
+//   },
+//   {
+//     status: 'Assigned',
+//     owner: 'Eddie',
+//     effort: 14,
+//     created: new Date('2019-01-16'),
+//     due: new Date('2019-02-01'),
+//     id: 2,
+//     title: 'Missing bottom border on panel',
+//   },
+// ];
 
 db.issues.insertMany(issuesDB);
 const count = db.issues.count();

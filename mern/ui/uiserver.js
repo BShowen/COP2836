@@ -1,3 +1,4 @@
+//This is an npm module that we use to create and set environment variables
 require('dotenv').config();
 
 const express = require('express');

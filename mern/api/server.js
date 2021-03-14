@@ -48,18 +48,18 @@ function setAboutMessage(_, { message }) {
 }
 
 function issueValidate(issue) {
-  const errors = [];
+  const anyErrors = [];
   if (Number.isNaN(issue.effort)) {
-    errors.push('Field "effort" can accept only integers.');
+    anyErrors.push('Field "effort" can accept only integers.');
   }
   if (issue.title.length < 3) {
-    errors.push('Field "title" must be at least 3 characters long.');
+    anyErrors.push('Field "title" must be at least 3 characters long.');
   }
   if (issue.status === 'Assigned' && !issue.owner) {
-    errors.push('Field "owner" is required when status is "Assigned"');
+    anyErrors.push('Field "owner" is required when status is "Assigned"');
   }
-  if (errors.length > 0) {
-    throw new UserInputError('Invalid input(s)', { errors });
+  if (anyErrors.length > 0) {
+    throw new UserInputError('Invalid input(s)', { anyErrors });
   }
 }
 
@@ -128,3 +128,4 @@ server.applyMiddleware({ app, path: '/graphql', cors: enableCors });
     console.log('ERROR:', err);
   }
 }());
+
