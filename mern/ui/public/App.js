@@ -2,6 +2,10 @@
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+var _graphQLFetch = _interopRequireDefault(require("./graphQLFetch.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -26,15 +30,6 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-/* eslint "react/react-in-jsx-scope": "off" */
-
-/* globals React ReactDOM PropTypes */
-
-/* eslint "react/jsx-no-undef": "off" */
-
-/* eslint "react/no-multi-comp": "off" */
-
-/* eslint "no-alert": "off" */
 // eslint-disable-next-line react/prefer-stateless-function
 var IssueFilter = /*#__PURE__*/function (_React$Component) {
   _inherits(IssueFilter, _React$Component);
@@ -68,13 +63,6 @@ function IssueTable(_ref) {
   return /*#__PURE__*/React.createElement("table", {
     className: "bordered-table"
   }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "ID"), /*#__PURE__*/React.createElement("th", null, "Status"), /*#__PURE__*/React.createElement("th", null, "Owner"), /*#__PURE__*/React.createElement("th", null, "Created"), /*#__PURE__*/React.createElement("th", null, "Effort"), /*#__PURE__*/React.createElement("th", null, "Due Date"), /*#__PURE__*/React.createElement("th", null, "Title"))), /*#__PURE__*/React.createElement("tbody", null, issueRows));
-}
-
-var dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
-
-function jsonDateReviver(key, value) {
-  if (dateRegex.test(value)) return new Date(value);
-  return value;
 }
 
 function IssueRow(_ref2) {
@@ -146,75 +134,6 @@ IssueAdd.propTypes = {
   createIssue: PropTypes.func.isRequired
 };
 
-function graphQLFetch(_x) {
-  return _graphQLFetch.apply(this, arguments);
-}
-
-function _graphQLFetch() {
-  _graphQLFetch = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(query) {
-    var variables,
-        response,
-        body,
-        result,
-        error,
-        details,
-        _args3 = arguments;
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            variables = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : {};
-            _context3.prev = 1;
-            _context3.next = 4;
-            return fetch(window.ENV.UI_API_ENDPOINT, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                query: query,
-                variables: variables
-              })
-            });
-
-          case 4:
-            response = _context3.sent;
-            _context3.next = 7;
-            return response.text();
-
-          case 7:
-            body = _context3.sent;
-            result = JSON.parse(body, jsonDateReviver);
-
-            if (result.errors) {
-              error = result.errors[0];
-
-              if (error.extensions.code === 'BAD_USER_INPUT') {
-                details = error.extensions.exception.errors.join('\n ');
-                alert("".concat(error.message, ":\n ").concat(details));
-              } else {
-                alert("".concat(error.extensions.code, ": ").concat(error.message));
-              }
-            }
-
-            return _context3.abrupt("return", result.data);
-
-          case 13:
-            _context3.prev = 13;
-            _context3.t0 = _context3["catch"](1);
-            alert("Error in sending data to server: ".concat(_context3.t0.message));
-            return _context3.abrupt("return", null);
-
-          case 17:
-          case "end":
-            return _context3.stop();
-        }
-      }
-    }, _callee3, null, [[1, 13]]);
-  }));
-  return _graphQLFetch.apply(this, arguments);
-}
-
 var IssueList = /*#__PURE__*/function (_React$Component3) {
   _inherits(IssueList, _React$Component3);
 
@@ -249,7 +168,7 @@ var IssueList = /*#__PURE__*/function (_React$Component3) {
               case 0:
                 query = "query{\n            issueList {\n                id title status owner created effort due\n            }\n        }";
                 _context.next = 3;
-                return graphQLFetch(query);
+                return (0, _graphQLFetch.default)(query);
 
               case 3:
                 data = _context.sent;
@@ -285,7 +204,7 @@ var IssueList = /*#__PURE__*/function (_React$Component3) {
               case 0:
                 query = "mutation issueAdd($issue: IssueInputs!){\n            issueAdd(issue: $issue){\n                id\n            }\n        }";
                 _context2.next = 3;
-                return graphQLFetch(query, {
+                return (0, _graphQLFetch.default)(query, {
                   issue: issue
                 });
 
@@ -304,7 +223,7 @@ var IssueList = /*#__PURE__*/function (_React$Component3) {
         }, _callee2, this);
       }));
 
-      function createIssue(_x2) {
+      function createIssue(_x) {
         return _createIssue.apply(this, arguments);
       }
 
