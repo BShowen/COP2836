@@ -1,5 +1,6 @@
 //This is an npm module that we use to create and set environment variables
 require('dotenv').config();
+const path = require('path');
 
 const express = require('express');
 
@@ -54,6 +55,10 @@ const env = { UI_API_ENDPOINT };
 //which responds by adding a global variable to the DOM. 
 app.get('/env.js', (req, res) => {
   res.send(`window.ENV = ${JSON.stringify(env)}`);
+});
+
+app.get('*', (req, res)=>{
+  res.sendFile(path.resolve('public/index.html'));
 });
 
 
