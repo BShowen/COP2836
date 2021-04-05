@@ -9,7 +9,7 @@ export default class IssueEdit extends React.Component{
       issue: {},
     }
     this.onChange = this.onChange.bind(this);
-    this.handleClick = this.handleSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount(){
@@ -27,7 +27,7 @@ export default class IssueEdit extends React.Component{
   onChange(event){
     const { name, value } = event.target;
     this.setState( 
-    (prevState) => ({ issue: { ...prevState.issue, [name]: value }, }) 
+      (prevState) => ( { issue: { ...prevState.issue, [name]: value }, } )
     );
   }
 
@@ -95,25 +95,25 @@ export default class IssueEdit extends React.Component{
             <tr>
               <td>Owner:</td>
               <td>
-                <input name="Owner" value={owner} onChange={this.onChange} />
+                <input name="owner" value={owner} onChange={this.onChange} />
               </td>
             </tr>
             <tr>
               <td>Effort:</td>
               <td>
-                <input name="Effort" value={effort} onChange={this.onChange} />
+                <input name="effort" value={effort} onChange={this.onChange} />
               </td>
             </tr>
             <tr>
               <td>Due:</td>
               <td>
-                <input name="Due:" value={due} onChange={this.onChange} />
+                <input name="due:" value={due} onChange={this.onChange} />
               </td>
             </tr>
             <tr>
               <td>Title:</td>
               <td>
-                <input value="Title" value={title} onChange={this.onChange} />
+                <input value="title" value={title} onChange={this.onChange} />
               </td>
             </tr>
             <tr>
