@@ -600,9 +600,7 @@ var IssueFilter = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       var _this$state = this.state,
           status = _this$state.status,
-          changed = _this$state.changed; // const { location: { search } } = this.props;
-      // const params = new URLSearchParams(search);
-
+          changed = _this$state.changed;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Status:", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
         value: status,
         onChange: this.onChangeStatus

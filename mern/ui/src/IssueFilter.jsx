@@ -51,8 +51,6 @@ class IssueFilter extends React.Component {
 
   render(){
     const { status, changed } = this.state;
-    // const { location: { search } } = this.props;
-    // const params = new URLSearchParams(search);
     return (
       <div>
         Status: 
