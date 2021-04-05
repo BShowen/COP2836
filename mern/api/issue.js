@@ -14,9 +14,28 @@ async function list(_, { status, effortMin, effortMax}) {
   if (status) filter.status = status;
 
   if (effortMin !== undefined || effortMax !== undefined){
-    filter.effort = {};
-    if (effortMin !== undefined) filter.effort.$gte = effortMin;
-    if (effortMax !== undefined) filter.effort.$lte = effortMax;
+    /* 
+    This comment is about the three lines of code following this comment. 
+    This filter works because if you want to filter in Mongo you use the 
+    syntax {documentField : {$gte: someValue}} for example we can say 
+    we want all user with an age >= 18 with this filter {age: {$gte: 18}}. 
+    When we create this filter we are creating a key with the keyName 
+    as the same name as the field we are filtering on: effort. 
+    We create this filter in a way that the structure looks like this
+    filter = { effort: { $gte: values }}. We can see the structure by 
+    console logging the filter object, when running a query with a filter. 
+    You can use this query in the playground: 
+    query{
+      issueList(effortMin: 0 effortMax: 10){
+        id effort
+      }
+    }
+    And then uncomment the console.log statement below. 
+    */
+   filter.effort = {};
+   if (effortMin !== undefined) filter.effort.$gte = effortMin;
+   if (effortMax !== undefined) filter.effort.$lte = effortMax;
+  //  console.log("inside issue.js/list()/filter = ", filter);
   }
   const issues = await db.collection('issues').find(filter).toArray();
   return issues;

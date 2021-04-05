@@ -549,22 +549,34 @@ var IssueFilter = /*#__PURE__*/function (_React$Component) {
     var params = new url_search_params__WEBPACK_IMPORTED_MODULE_1___default.a(search);
     _this.state = {
       status: params.get('status') || '',
+      effortMin: params.get('effortMin') || '',
+      effortMax: params.get('effortMax') || '',
       changed: false
     };
     _this.onChangeStatus = _this.onChangeStatus.bind(_assertThisInitialized(_this));
     _this.applyFilter = _this.applyFilter.bind(_assertThisInitialized(_this));
     _this.showOriginalFilter = _this.showOriginalFilter.bind(_assertThisInitialized(_this));
+    _this.onChangeEffortMin = _this.onChangeEffortMin.bind(_assertThisInitialized(_this));
+    _this.onChangeEffortMax = _this.onChangeEffortMax.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(IssueFilter, [{
     key: "applyFilter",
     value: function applyFilter() {
-      var status = this.state.status;
+      var _this$state = this.state,
+          status = _this$state.status,
+          effortMin = _this$state.effortMin,
+          effortMax = _this$state.effortMax;
       var history = this.props.history;
+      var params = new url_search_params__WEBPACK_IMPORTED_MODULE_1___default.a();
+      if (status) params.set('status', status);
+      if (effortMin) params.set('effortMin', effortMin);
+      if (effortMax) params.set('effortMax', effortMax);
+      var search = params.toString() ? "?".concat(params.toString()) : '';
       history.push({
         pathname: '/issues',
-        search: status ? "?status=".concat(status) : ''
+        search: search
       });
     }
   }, {
@@ -586,21 +598,51 @@ var IssueFilter = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
+    key: "onChangeEffortMin",
+    value: function onChangeEffortMin(e) {
+      var effortString = e.target.value; //We cant test using this because if we do then it wont allow the user to completely delete the numbers
+      // from the min ro max form. Try it out and see what happens. 
+      // if( !Number.isNaN( parseInt(effortString) ) ){
+
+      if (effortString.match(/^\d*$/)) {
+        this.setState({
+          effortMin: e.target.value,
+          changed: true
+        });
+      }
+    }
+  }, {
+    key: "onChangeEffortMax",
+    value: function onChangeEffortMax(e) {
+      var effortString = e.target.value; // if( !Number.isNaN( parseInt(effortString) ) ){
+
+      if (effortString.match(/^\d*$/)) {
+        this.setState({
+          effortMax: e.target.value,
+          changed: true
+        });
+      }
+    }
+  }, {
     key: "showOriginalFilter",
     value: function showOriginalFilter() {
       var search = this.props.location.search;
       var params = new url_search_params__WEBPACK_IMPORTED_MODULE_1___default.a(search);
       this.setState({
         status: params.get('status') || '',
+        effortMin: params.get('effortMin') || '',
+        effortMax: params.get('effortMax') || '',
         changed: false
       });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this$state = this.state,
-          status = _this$state.status,
-          changed = _this$state.changed;
+      var _this$state2 = this.state,
+          status = _this$state2.status,
+          changed = _this$state2.changed,
+          effortMin = _this$state2.effortMin,
+          effortMax = _this$state2.effortMax;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Status:", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
         value: status,
         onChange: this.onChangeStatus
@@ -621,7 +663,17 @@ var IssueFilter = /*#__PURE__*/function (_React$Component) {
         type: "button",
         onClick: this.showOriginalFilter,
         disabled: !changed
-      }, "Reset"));
+      }, "Reset"), ' ', "Effort between:", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        size: 5,
+        value: effortMin // This method is called every single time that a user types something into the field. 
+        ,
+        onChange: this.onChangeEffortMin
+      }), ' - ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        size: 5,
+        value: effortMax // This method is called every single time that a user types something into the field. 
+        ,
+        onChange: this.onChangeEffortMax
+      }), ' ');
     }
   }]);
 
@@ -724,7 +776,7 @@ var IssueList = /*#__PURE__*/function (_React$Component) {
     key: "loadData",
     value: function () {
       var _loadData = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var search, params, vars, query, data;
+        var search, params, vars, effortMin, effortMax, query, data;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -733,11 +785,15 @@ var IssueList = /*#__PURE__*/function (_React$Component) {
                 params = new url_search_params__WEBPACK_IMPORTED_MODULE_6___default.a(search);
                 vars = {};
                 if (params.get('status')) vars.status = params.get('status');
-                query = "query issueList($status: StatusType) {\n          issueList (status: $status){\n              id title status owner created effort due\n          }\n      }";
-                _context.next = 7;
+                effortMin = parseInt(params.get('effortMin'), 10);
+                if (!Number.isNaN(effortMin)) vars.effortMin = effortMin;
+                effortMax = parseInt(params.get('effortMax', 10));
+                if (!Number.isNaN(effortMax)) vars.effortMax = effortMax;
+                query = "query issueList(\n      $status: StatusType\n      $effortMin: Int\n      $effortMax: Int\n    ) {\n      issueList (\n        status: $status\n        effortMin: $effortMin\n        effortMax: $effortMax\n      ){\n        id title status owner created effort due\n      }\n    }";
+                _context.next = 11;
                 return Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_5__["default"])(query, vars);
 
-              case 7:
+              case 11:
                 data = _context.sent;
 
                 if (data) {
@@ -746,7 +802,7 @@ var IssueList = /*#__PURE__*/function (_React$Component) {
                   });
                 }
 
-              case 9:
+              case 13:
               case "end":
                 return _context.stop();
             }
@@ -769,7 +825,7 @@ var IssueList = /*#__PURE__*/function (_React$Component) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                query = "mutation issueAdd($issue: IssueInputs!){\n          issueAdd(issue: $issue){\n              id\n          }\n      }";
+                query = "mutation issueAdd($issue: IssueInputs!){\n      issueAdd(issue: $issue){\n        id\n      }\n    }";
                 _context2.next = 3;
                 return Object(_graphQLFetch_js__WEBPACK_IMPORTED_MODULE_5__["default"])(query, {
                   issue: issue
