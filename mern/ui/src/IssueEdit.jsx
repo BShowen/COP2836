@@ -1,6 +1,7 @@
 import React from 'react';
 import graphQLFetch from './graphQLFetch';
 import { Link } from 'react-router-dom';
+import NumInput from './NumInput.jsx';
 
 export default class IssueEdit extends React.Component{
   constructor(){
@@ -24,8 +25,9 @@ export default class IssueEdit extends React.Component{
     }
   }
 
-  onChange(event){
-    const { name, value } = event.target;
+  onChange(event, naturalValue){
+    const { name, value: textValue } = event.target;
+    const value = naturalValue === undefined ? textValue : naturalValue;
     this.setState( 
       (prevState) => ( { issue: { ...prevState.issue, [name]: value }, } )
     );
@@ -49,7 +51,6 @@ export default class IssueEdit extends React.Component{
     if(data){
       const { issue } = data;
       issue.due = issue.due ? issue.due.toDateString() : '';
-      issue.effort = issue.effort != null ? issue.effort.toString() : '';
       issue.owner = issue.owner != null ? issue.owner : '';
       issue.description = issue.description != null ? issue.description : '';
       this.setState({ issue });
@@ -101,7 +102,7 @@ export default class IssueEdit extends React.Component{
             <tr>
               <td>Effort:</td>
               <td>
-                <input name="effort" value={effort} onChange={this.onChange} />
+                <NumInput name="effort" value={effort} key={id} onChange={this.onChange} />
               </td>
             </tr>
             <tr>
