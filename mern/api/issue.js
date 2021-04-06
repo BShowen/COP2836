@@ -80,4 +80,18 @@ async function update(_, { id, changes }){
   return savedIssue;
 }
 
-module.exports = { list, add, get, update };
+async function remove(_, { id }){
+  const db = getDb();
+  const issue = await db.collection('issues').findOne({ id });
+  if (!issue) return false;
+  issue.deleted = new Date();
+
+  let result = await db.collection('delete_issues').insertOne(issue);
+  if (result.insertedId){
+    result = await db.collection('issues').removeOne({ id });
+    return result.deletedCount === 1;
+  }
+  return false;
+}
+
+module.exports = { list, add, get, update, delete: remove };
