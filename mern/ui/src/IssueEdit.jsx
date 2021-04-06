@@ -26,11 +26,12 @@ export default class IssueEdit extends React.Component{
   }
 
   onChange(event, naturalValue){
+    console.log("IssueEdit.onChange()");
     const { name, value: textValue } = event.target;
     const value = naturalValue === undefined ? textValue : naturalValue;
-    this.setState( 
-      (prevState) => ( { issue: { ...prevState.issue, [name]: value }, } )
-    );
+    this.setState(prevState => ({ 
+      issue: { ...prevState.issue, [name]: value }, 
+    }));
   }
 
   handleSubmit(e){
@@ -68,7 +69,7 @@ export default class IssueEdit extends React.Component{
       }
       return null;
     }
-
+    
     const { issue: { title, status } } = this.state;
     const { issue: { owner, effort, description } } = this.state;
     const { issue: { created, due } } = this.state;
@@ -83,9 +84,9 @@ export default class IssueEdit extends React.Component{
               <td>{created.toDateString()}</td>
             </tr>
             <tr>
-              <td>Status:</td>
+            <td>Status:</td>
               <td>
-                <select name='status' value={status} onChange={this.onChange}>
+                <select name="status" value={status} onChange={this.onChange}>
                   <option value="New">New</option>
                   <option value="Assigned">Assigned</option>
                   <option value="Fixed">Fixed</option>
@@ -102,19 +103,28 @@ export default class IssueEdit extends React.Component{
             <tr>
               <td>Effort:</td>
               <td>
-                <NumInput name="effort" value={effort} key={id} onChange={this.onChange} />
+                <NumInput
+                  name="effort"
+                  value={effort}
+                  onChange={this.onChange}
+                  key={id}
+                />
               </td>
             </tr>
             <tr>
               <td>Due:</td>
               <td>
-                <input name="due:" value={due} onChange={this.onChange} />
+                <input
+                  name="due"
+                  value={due}
+                  onChange={this.onChange}
+                />
               </td>
             </tr>
             <tr>
               <td>Title:</td>
               <td>
-                <input value="title" value={title} onChange={this.onChange} />
+                <input size={50} name="title" value={title} onChange={this.onChange} />
               </td>
             </tr>
             <tr>

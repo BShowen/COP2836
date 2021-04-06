@@ -12,12 +12,13 @@ function unformat(str){
 export default class NumInput extends React.Component{
   constructor(props){
     super(props);
-    this.state = { value: format(this.props.value) };
+    this.state = { value: format(props.value) };
     this.onBlur = this.onBlur.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
   onChange(e){
+    console.log("NumInput.onChange()");
     if (e.target.value.match(/^\d*$/)){
       this.setState({ value: e.target.value })
     }
