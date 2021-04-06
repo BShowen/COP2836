@@ -1,31 +1,44 @@
 import React from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 
-export default function IssueTable({ issues }){
-  const issueRows = issues.map(issue => <IssueRow key={issue.id} issue={issue} />);
-      return(
-          <table className="bordered-table">
-              <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Status</th>
-                    <th>Owner</th>
-                    <th>Created</th>
-                    <th>Effort</th>
-                    <th>Due Date</th>
-                    <th>Title</th>
-                    <th>Action</th>
-                </tr>
-              </thead>
-              <tbody> 
-                {issueRows}
-              </tbody>
-          </table>
-      );
+export default function IssueTable({ issues, closeIssue }){
+  const issueRows = issues.map((issue, index) => (
+    <IssueRow 
+      key={issue.id}
+      issue={issue}
+      closeIssue={closeIssue}
+      index={index}
+    />
+  ));
+
+  return(
+    <table className="bordered-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Status</th>
+          <th>Owner</th>
+          <th>Created</th>
+          <th>Effort</th>
+          <th>Due Date</th>
+          <th>Title</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody> 
+        {issueRows}
+      </tbody>
+    </table>
+  );
 }
 
 
-const IssueRow = withRouter(({ issue, location: { search } }) => {
+const IssueRow = withRouter(({ 
+  issue, 
+  location: { search }, 
+  closeIssue, 
+  index,
+}) => {
   const selectLocation = { pathname: `/issues/${issue.id}`, search };
   return(
     <tr>
@@ -40,7 +53,9 @@ const IssueRow = withRouter(({ issue, location: { search } }) => {
         <Link to={`/edit/${issue.id}`}>Edit</Link>
         {' | '}
         <NavLink to={selectLocation}>Select</NavLink>
+        {' | '}
+        <button type="button" onClick={()=>{ closeIssue(index); }}>Close</button>
       </td>
     </tr>
   );
-})
+});

@@ -35,7 +35,7 @@ input IssueInputs {
 will be set to the given value, undefined fields will remain unmodified."""
 input IssueUpdateInputs {
   title: String
-  status: String
+  status: StatusType
   owner: String
   effort: Int
   due: GraphQLDate
