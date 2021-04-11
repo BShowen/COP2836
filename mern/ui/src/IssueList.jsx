@@ -57,6 +57,7 @@ export default class IssueList extends React.Component{
     
     const data = await graphQLFetch(query, vars);
     if(data){
+      // console.log("IssueList loadData().data = ", data);
       this.setState({ issues: data.issueList });
     }
   }
