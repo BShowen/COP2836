@@ -7,6 +7,7 @@ import IssueDetail from './IssueDetail.jsx';
 import graphQLFetch from './graphQLFetch.js';
 import URLSearchParams from 'url-search-params';
 import { Route } from 'react-router-dom';
+import { Panel } from 'react-bootstrap';
 
 export default class IssueList extends React.Component{
   constructor(){
@@ -121,7 +122,14 @@ export default class IssueList extends React.Component{
     const { match } = this.props;
     return(
       <React.Fragment>
-        <IssueFilter />
+        <Panel>
+          <Panel.Heading>
+            <Panel.Title toggle>Filter</Panel.Title>
+          </Panel.Heading>
+          <Panel.Body collapsible>
+            <IssueFilter />
+          </Panel.Body>
+        </Panel>
         <hr />
         <IssueTable 
           issues={ issues } 

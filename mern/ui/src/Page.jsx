@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Navbar, Nav, NavItem, NavDropdown, 
-  MenuItem, Glyphicon, Tooltip, OverlayTrigger,
+  MenuItem, Glyphicon, Tooltip, OverlayTrigger, Grid,
 } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -10,7 +10,7 @@ import Contents from './Contents.jsx';
 
 function NavBar(){
   return (
-    <Navbar fixedTop>
+    <Navbar fluid>
       <Navbar.Header>
         <Navbar.Brand>Issue Tracker</Navbar.Brand>
       </Navbar.Header>
@@ -65,7 +65,9 @@ export default function Page(){
   return (
     <div>
       <NavBar />
-      <Contents />
+      <Grid fluid>
+        <Contents />
+      </Grid>
       <Footer />
     </div>
   );
