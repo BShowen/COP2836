@@ -2,7 +2,11 @@
 import React from 'react';
 import URLSearchParams from 'url-search-params';
 import { withRouter } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { 
+  Button, ButtonToolbar, FormGroup, 
+  FormControl, ControlLabel, InputGroup,
+  Row, Col,
+} from 'react-bootstrap';
 
 class IssueFilter extends React.Component {
   constructor({ location: { search } }){
@@ -52,7 +56,7 @@ class IssueFilter extends React.Component {
   onChangeEffortMin(e){
     const effortString = e.target.value;
     //We cant test using this because if we do then it wont allow the user to completely delete the numbers
-    // from the min ro max form. Try it out and see what happens. 
+    // from the min to max form. Try it out and see what happens. 
     // if( !Number.isNaN( parseInt(effortString) ) ){
     if(effortString.match(/^\d*$/)){
       this.setState({ effortMin: e.target.value, changed: true });
@@ -81,38 +85,43 @@ class IssueFilter extends React.Component {
   render(){
     const { status, changed, effortMin, effortMax } = this.state;
     return (
-      <div>
-        Status: 
-        {' '}
-        <select value={ status } onChange={this.onChangeStatus}>
-          <option value="">(All)</option>
-          <option value="New">New</option>
-          <option value="Assigned">Assigned</option>
-          <option value="Fixed">Fixed</option>
-          <option value="Closed">Closed</option>
-        </select>
-        {' '}
-        <Button bsStyle='primary' type='button' onClick={this.applyFilter}>Apply</Button>
-        {' '}
-        <Button bsStyle='primary' type='button' onClick={this.showOriginalFilter} disabled={!changed}>Reset</Button>
-        {' '}
-        Effort between:
-        {' '}
-        <input 
-          size={5}
-          value={effortMin}
-          // This method is called every single time that a user types something into the field. 
-          onChange={this.onChangeEffortMin}
-        />
-        {' - '}
-        <input 
-          size={5}
-          value={effortMax}
-          // This method is called every single time that a user types something into the field. 
-          onChange={this.onChangeEffortMax}
-        />
-        {' '}
-      </div>
+      <Row style={{border: '10px solid red;'}}>
+        <Col xs={6} sm={4} md={3} lg={2}>
+          <FormGroup>
+            <ControlLabel>Status:</ControlLabel>
+            <FormControl
+              componentClass="select"
+              value={status}
+              onChange={this.onChangeStatus}
+            >
+              <option value="">(All)</option>
+              <option value="New">New</option>
+              <option value="Assigned">Assigned</option>
+              <option value="Fixed">Fixed</option>
+              <option value="Closed">Closed</option>
+            </FormControl>
+          </FormGroup>
+        </Col>
+        <Col xs={6} sm={4} md={3} lg={2}>
+          <FormGroup>
+            <ControlLabel>Effort between:</ControlLabel>
+            <InputGroup>
+              <FormControl value={effortMin} onChange={this.onChangeEffortMin} />
+              <InputGroup.Addon>-</InputGroup.Addon>
+              <FormControl value={effortMax} onChange={this.onChangeEffortMax} />
+            </InputGroup>
+          </FormGroup>
+        </Col>
+        <Col xs={6} sm={4} md={3} lg={2}>
+          <FormGroup>
+            <ControlLabel>&nbsp;</ControlLabel>
+            <ButtonToolbar>
+              <Button bsStyle='primary' type='button' onClick={this.applyFilter}>Apply</Button>
+              <Button bsStyle='primary' type='button' onClick={this.showOriginalFilter} disabled={!changed}>Reset</Button>
+            </ButtonToolbar>
+          </FormGroup>
+        </Col>
+      </Row>
     );
   }
 }
