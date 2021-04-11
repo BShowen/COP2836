@@ -85,7 +85,7 @@ class IssueFilter extends React.Component {
   render(){
     const { status, changed, effortMin, effortMax } = this.state;
     return (
-      <Row style={{border: '10px solid red;'}}>
+      <Row>
         <Col xs={6} sm={4} md={3} lg={2}>
           <FormGroup>
             <ControlLabel>Status:</ControlLabel>
