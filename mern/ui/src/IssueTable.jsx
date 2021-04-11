@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
+import { Button, Glyphicon, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 export default function IssueTable({ issues, closeIssue, deleteIssue }){
   const issueRows = issues.map((issue, index) => (
@@ -42,6 +43,16 @@ const IssueRow = withRouter(({
   index,
 }) => {
   const selectLocation = { pathname: `/issues/${issue.id}`, search };
+  const deleteTooltip = (
+    <Tooltip id='delete-tooltip'>
+      Delete Issue
+    </Tooltip>
+  );
+  const closeTooltip = (
+    <Tooltip id='close-tooltip'>
+      Close Issue
+    </Tooltip>
+  );
   return(
     <tr>
       <td>{issue.id}</td>
@@ -56,9 +67,19 @@ const IssueRow = withRouter(({
         {' | '}
         <NavLink to={selectLocation}>Select</NavLink>
         {' | '}
-        <button type="button" onClick={()=>{ closeIssue(index); }}>Close</button>
-        {' | '}
-        <button type="button" onClick={()=>{ deleteIssue(index); }}>Delete</button>
+        <OverlayTrigger placement='top' delayShow={250} overlay={closeTooltip}>
+          <Button bsSize='xsmall' type="button" onClick={()=>{ closeIssue(index); }}>
+            <Glyphicon glyph='remove'/>
+          </Button>
+        </OverlayTrigger>
+        {/* Here, I use &nbsp; instead of {' '} */}
+        {/* {' '} */}
+        &nbsp;
+        <OverlayTrigger placement='top' delayShow={250} overlay={deleteTooltip}>
+          <Button bsSize='xsmall' type="button" onClick={()=>{ deleteIssue(index); }}>
+            <Glyphicon glyph='trash' />
+          </Button>
+        </OverlayTrigger>
       </td>
     </tr>
   );
