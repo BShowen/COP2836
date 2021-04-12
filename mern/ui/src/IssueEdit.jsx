@@ -8,6 +8,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Col, Panel, Form, FormGroup, FormControl, ControlLabel, 
 ButtonToolbar, Button, Alert
 } from 'react-bootstrap';
+import Toast from './Toast.jsx';
 
 export default class IssueEdit extends React.Component{
   constructor(){
@@ -16,12 +17,34 @@ export default class IssueEdit extends React.Component{
       issue: {},
       invalidFields: {},
       showingValidation: false, 
+      toastVisible: false, 
+      toastMessage: '', 
+      toastType: 'success',
     }
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onValidityChange = this.onValidityChange.bind(this);
     this.dismissValidation = this.dismissValidation.bind(this);
     this.showValidation = this.showValidation.bind(this);
+    this.showSuccess = this.showSuccess.bind(this);
+    this.showError = this.showError.bind(this);
+    this.dismissToast = this.dismissToast.bind(this);
+  }
+
+  showSuccess(message){
+    this.setState({
+      toastVisible: true, toastMessage: message, toastType: 'success',
+    })
+  }
+
+  showError(message){
+    this.setState({
+      toastVisible: true, toastMessage: message, toastType: 'danger',
+    });
+  }
+
+  dismissToast(){
+    this.setState({toastVisible: false})
   }
 
   onValidityChange(event, valid){
@@ -75,10 +98,11 @@ export default class IssueEdit extends React.Component{
     }`;
 
     const { id, created, ...changes } = issue;
-    const data = await graphQLFetch(query, { changes, id });
+    const data = await graphQLFetch(query, { changes, id }, this.showError);
     if (data) {
       this.setState({ issue: data.issueUpdate });
-      alert('Updated issue successfully'); //eslint-disable-line no-alert
+      // alert('Updated issue successfully'); //eslint-disable-line no-alert
+      this.showSuccess('Updated issue successfully');
     }
   }
 
@@ -104,6 +128,8 @@ export default class IssueEdit extends React.Component{
   }
   
   render(){
+    const { toastVisible, toastMessage, toastType } = this.state;
+    console.log(`IssueEdit render() toastVisible = ${toastVisible}, toastMessage = ${toastMessage}, toastType = ${toastType}`)
     const { issue: { id } } = this.state;
     const { match: { params: { id: propsId } } } = this.props;
     if (id == null){
@@ -256,6 +282,14 @@ export default class IssueEdit extends React.Component{
             {` | `}
           <Link to={`/edit/${id + 1}`}>Next</Link>
         </Panel.Footer>
+
+        <Toast 
+          showing={ toastVisible } 
+          bsStyle={ toastType } 
+          onDismiss={ this.dismissToast }
+          >
+            {toastMessage}
+          </Toast>
       </Panel>
     );
   }
