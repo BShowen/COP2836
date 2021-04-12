@@ -6,7 +6,7 @@ import DateInput from './DateInput.jsx';
 import TextInput from './TextInput.jsx';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Col, Panel, Form, FormGroup, FormControl, ControlLabel, 
-ButtonToolbar, Button, 
+ButtonToolbar, Button, Alert
 } from 'react-bootstrap';
 
 export default class IssueEdit extends React.Component{
@@ -15,10 +15,13 @@ export default class IssueEdit extends React.Component{
     this.state = {
       issue: {},
       invalidFields: {},
+      showingValidation: false, 
     }
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onValidityChange = this.onValidityChange.bind(this);
+    this.dismissValidation = this.dismissValidation.bind(this);
+    this.showValidation = this.showValidation.bind(this);
   }
 
   onValidityChange(event, valid){
@@ -43,16 +46,18 @@ export default class IssueEdit extends React.Component{
   }
 
   onChange(event, naturalValue){
-
+    //name = the event name. For example it could be "effort", or "title" etc. 
     const { name, value: textValue } = event.target;
-    const value = naturalValue === undefined ? textValue : naturalValue;
+    const value = (naturalValue === undefined) ? textValue : naturalValue ;
     this.setState(prevState => ({ 
-      issue: { ...prevState.issue, [name]: value }, 
+      issue: { ...prevState.issue, [name]: value },
     }));
+
   }
 
   async handleSubmit(e){
     e.preventDefault();
+    this.showValidation();
     const { issue, invalidFields } = this.state;
     if(Object.keys(invalidFields).length !== 0) return;
 
@@ -90,6 +95,14 @@ export default class IssueEdit extends React.Component{
     this.setState({ issue: data ? data.issue : {}, invalidFields: {} })
   }
 
+  showValidation(){
+    this.setState({ showingValidation: true });
+  }
+
+  dismissValidation(){
+    this.setState({ showingValidation: false });
+  }
+  
   render(){
     const { issue: { id } } = this.state;
     const { match: { params: { id: propsId } } } = this.props;
@@ -100,14 +113,14 @@ export default class IssueEdit extends React.Component{
       return null;
     }
 
-    const { invalidFields } = this.state;
+    const { invalidFields, showingValidation } = this.state;
     let validationMessage;
 
-    if (Object.keys(invalidFields).length !== 0){
+    if (Object.keys(invalidFields).length !==0  && showingValidation){
       validationMessage = (
-        <div className="error">
+        <Alert bsStyle="danger" onDismiss={this.dismissValidation}>
           Please correct invalid fields before submitting. 
-        </div>
+        </Alert>
       );
     }
     
@@ -123,7 +136,7 @@ export default class IssueEdit extends React.Component{
 
         <Panel.Body>
           <Form horizontal onSubmit={this.handleSubmit}>
-
+            
             <FormGroup>
               <Col componentClass={ControlLabel} sm={3}>Created</Col>
               <Col sm={9}>
@@ -138,6 +151,7 @@ export default class IssueEdit extends React.Component{
               <Col sm={9}>
                 <FormControl
                   componentClass="select"
+                  name="status"
                   value={status}
                   onChange={this.onChange}
                 >
@@ -230,7 +244,11 @@ export default class IssueEdit extends React.Component{
               </Col>
             </FormGroup>
 
-            {validationMessage}
+            <FormGroup>
+              <Col smOffset={3} sm={9}>
+                {validationMessage}
+              </Col>
+            </FormGroup>
           </Form>
         </Panel.Body>
         <Panel.Footer>
