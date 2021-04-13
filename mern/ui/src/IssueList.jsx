@@ -2,7 +2,6 @@ import React from 'react';
 
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
-import IssueAdd from './IssueAdd.jsx';
 import IssueDetail from './IssueDetail.jsx';
 import graphQLFetch from './graphQLFetch.js';
 import Toast from './Toast.jsx';
@@ -19,7 +18,6 @@ export default class IssueList extends React.Component{
       toastMessage: '', 
       toastType: 'success',
     };
-    this.createIssue = this.createIssue.bind(this);
     this.closeIssue = this.closeIssue.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
     this.showSuccess = this.showSuccess.bind(this);
@@ -84,20 +82,6 @@ export default class IssueList extends React.Component{
     if(data){
       // console.log("IssueList loadData().data = ", data);
       this.setState({ issues: data.issueList });
-    }
-  }
-
-  async createIssue(issue){
-    const query = `mutation issueAdd($issue: IssueInputs!){
-      issueAdd(issue: $issue){
-        id
-      }
-    }`;
-
-    const data = await graphQLFetch(query, { issue }, this.showError);
-    if (data){
-      this.loadData();
-      this.showSuccess(`Issue ${data.issueAdd.id} created successfully.`)
     }
   }
 
@@ -167,7 +151,7 @@ export default class IssueList extends React.Component{
           closeIssue={this.closeIssue} 
           deleteIssue={this.deleteIssue}
         />
-        <IssueAdd createIssue={this.createIssue}/>
+        {/* <IssueAdd createIssue={this.createIssue}/> */}
         <Route path={`${match.path}/:id`} component={IssueDetail} />
         <Toast showing={toastVisible} bsStyle={toastType} onDismiss={this.dismissToast}>
           {toastMessage}
