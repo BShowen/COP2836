@@ -13,11 +13,11 @@ export default async function graphQLFetch(query, variables = {}, showError = nu
           headers: { 'Content-Type': 'application/json' }, 
           body: JSON.stringify({ query, variables })
       });
-      // console.log(
-      //   "query = ", query, 
-      //   "\nvars = ", variables, 
-      //   "\nJSON.stringify({query, vars}) = ", JSON.stringify({query, variables})
-      // );
+      console.log(
+        "query = ", query, 
+        "\nvars = ", variables, 
+        "\nJSON.stringify({query, vars}) = ", JSON.stringify({query, variables})
+      );
       const body = await response.text();
       const result = JSON.parse(body, jsonDateReviver);
 
